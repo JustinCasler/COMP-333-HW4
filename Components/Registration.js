@@ -1,13 +1,21 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import { Text, TextInput, Button, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+
+
 const Registration = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const navigation = useNavigation();
 
   const handleSignUp = () => {
-    if (password === confirmPassword) {
+    if (!password || !confirmPassword || !username) {
+      alert("Please don't leave any field blank.");
+    } else if(password.length < 10 || confirmPassword.length){
+      alert("Password must be at least 10 charecters.");
+    } else if (password === confirmPassword) {
       const inputs = {
         username: username,
         password: password,
@@ -16,10 +24,9 @@ const Registration = () => {
       
       axios.post(process.env.EXPO_PUBLIC_API_URL , { inputs, action: "register" })
       .then((response) => {
-        console.log(response)
         if (response.data.status === 1) {
           // Registration was successful
-          alert('Success!');
+          navigation.navigate('Login')
         } else if (response.data.status === 0) {
           // Registration failed, display the error message from the backend
           alert('Username taken!');
