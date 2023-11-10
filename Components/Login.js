@@ -52,6 +52,7 @@ export default function Login({ navigation }) {
       
       <View style={styles.buttonContainer} >
         <Button title="Login" onPress={handleSubmit} style={styles.button}/>
+        <View style={styles.space} />
         <Button title="Clear" onPress={() => { setInputs({}); }} style={styles.button}/>
       </View>
       
@@ -94,5 +95,9 @@ const styles = StyleSheet.create({
   },
   button: {
     margin: 30, 
+  },
+  space: {
+    width: 20, // or whatever size you need
+    height: 20,
   },
 });
