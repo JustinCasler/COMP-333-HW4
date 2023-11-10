@@ -10,19 +10,28 @@ const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Registration" component={Registration} />
-        <Stack.Screen
-          name="Overview"
-          component={Overview}
-          options={{
-            headerLeft: null, // This removes the back button in the header
-          }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+<NavigationContainer>
+  <Stack.Navigator>
+    <Stack.Screen
+      name="Overview"
+      component={Overview}
+      options={{
+        headerLeft: null, // Remove back button in the header
+      }}
+    />
+    <Stack.Screen
+      name="Login"
+      component={Login}
+      options={{
+        headerLeft: null, // Remove back button in the header
+      }}
+    />
+    <Stack.Screen
+      name="Registration"
+      component={Registration}
+    />
+  </Stack.Navigator>
+</NavigationContainer>
   );
 }
 
