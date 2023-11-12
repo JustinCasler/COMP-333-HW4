@@ -13,7 +13,7 @@ const Registration = () => {
   const handleSignUp = () => {
     if (!password || !confirmPassword || !username) {
       alert("Please don't leave any field blank.");
-    } else if(password.length < 10 || confirmPassword.length){
+    } else if(password.length < 10 || confirmPassword.length < 10){
       alert("Password must be at least 10 charecters.");
     } else if (password === confirmPassword) {
       const inputs = {
