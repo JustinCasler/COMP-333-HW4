@@ -4,7 +4,10 @@ import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 
 const Overview = ({ route, navigation }) => {
-  const [username, setUsername] = useState(route.params?.username || '');
+  var username
+  if (route.params) {
+     username = route.params.username;
+  }
   const handleLogout = () => {
     navigation.navigate('Login');
   };
@@ -62,7 +65,7 @@ const Overview = ({ route, navigation }) => {
           username: firstSong.username,
           artist: firstSong.artist,
           song: firstSong.song,
-          rating: averageRating.toFixed(0), // Round to two decimal places
+          rating: averageRating.toFixed(2), // Round to two decimal places
         });
       }
     }
@@ -72,6 +75,21 @@ const Overview = ({ route, navigation }) => {
   const handleSort = (itemValue) => {
     setSortBy(itemValue);
   };
+
+  const renderStars = (rating) => {
+    const starCount = Math.round(rating);
+    const stars = Array.from({ length: 5 }, (_, index) => (
+      <Text key={index}>{index < starCount ? '★' : '☆'}</Text>
+    ));
+    return <View style={styles.starsContainer}>{stars}</View>;
+  };
+
+  const renderSongItem = (item, index) => (
+    <View key={index} style={styles.songContainer}>
+      <Text style={styles.songText}>{`${item.song}`}<Text style={{fontWeight: 'normal'}}> by {item.artist}</Text></Text>
+      {renderStars(item.rating)}
+    </View>
+  );
 
   return (
     <View style={styles.container}>
@@ -87,18 +105,7 @@ const Overview = ({ route, navigation }) => {
             <Picker.Item label="Sort By Rating (High to Low)" value="-rating" />
           </Picker>
           <ScrollView>
-            <View style={styles.tableHeader}>
-              <Text style={styles.headerText}>Artist</Text>
-              <Text style={styles.headerText}>Song</Text>
-              <Text style={styles.headerText}>Rating</Text>
-            </View>
-            {songs.map((item, index) => (
-              <View key={index} style={styles.tableRow}>
-                <Text>{item.artist}</Text>
-                <Text>{item.song}</Text>
-                <Text>{item.rating}</Text>
-              </View>
-            ))}
+            {songs.map((item, index) => renderSongItem(item, index))}
           </ScrollView>
         </>
       ) : (
@@ -113,18 +120,20 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: 20,
   },
-  tableHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 10,
+  songContainer: {
+    marginBottom: 20,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
   },
-  headerText: {
+  songText: {
+    fontSize: 16,
     fontWeight: 'bold',
   },
-  tableRow: {
+  starsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 10,
+    marginTop: 5,
   },
 });
 
