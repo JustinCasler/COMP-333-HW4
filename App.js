@@ -5,6 +5,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import Registration from './Components/Registration';
 import Login from './Components/Login'
 import Overview from './Components/Overview'
+import NewRating from './Components/NewRating'
 
 const Stack = createStackNavigator();
 
@@ -29,6 +30,10 @@ export default function App() {
     <Stack.Screen
       name="Registration"
       component={Registration}
+    />
+    <Stack.Screen
+      name="NewRating"
+      component={NewRating}
     />
   </Stack.Navigator>
 </NavigationContainer>

@@ -11,6 +11,9 @@ const Overview = ({ route, navigation }) => {
   const handleLogout = () => {
     navigation.navigate('Login');
   };
+  const handleAddNew = () => {
+    navigation.navigate('NewRating', { username: username });
+  };
   const [songs, setSongs] = useState([]);
   const [sortBy, setSortBy] = useState(''); // State to store the selected sorting option
 
@@ -96,7 +99,6 @@ const Overview = ({ route, navigation }) => {
       {username ? (
         <>
           <Text>{`Hi, ${username}!`}</Text>
-          <Button title="Logout" onPress={handleLogout} />
           <Picker selectedValue={sortBy} onValueChange={handleSort}>
             <Picker.Item label="Select" value="" />
             <Picker.Item label="Sort By Artist (A-Z)" value="artist" />
@@ -107,6 +109,8 @@ const Overview = ({ route, navigation }) => {
           <ScrollView>
             {songs.map((item, index) => renderSongItem(item, index))}
           </ScrollView>
+          <Button title="Add New" onPress={handleAddNew} />
+          <Button title="Logout" onPress={handleLogout} />
         </>
       ) : (
         <Text>Loading...</Text>
