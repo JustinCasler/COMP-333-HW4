@@ -72,6 +72,7 @@ const Overview = ({ route, navigation }) => {
           artist: firstSong.artist,
           song: firstSong.song,
           rating: averageRating.toFixed(2), // Round to two decimal places
+          id: firstSong.ID,
         });
       }
     }
@@ -95,7 +96,7 @@ const Overview = ({ route, navigation }) => {
       <Text style={styles.songText}>{`${item.song}`}<Text style={{fontWeight: 'normal'}}> by {item.artist}</Text></Text>
       {renderStars(item.rating)}
       {item.username.includes(username) && (
-        <TouchableOpacity onPress={() => navigation.navigate('Update', { song: item.song, artist: item.artist })}>
+        <TouchableOpacity onPress={() => navigation.navigate('Update', { song: item.song, artist: item.artist, id: item.id, username: username })}>
           <Icon name="pencil" size={20} color="black" />
         </TouchableOpacity>
       )}
