@@ -8,6 +8,7 @@ const UpdateRating = ({ route, navigation }) => {
   const [message, setMessage] = useState('');
   const [inputs, setInputs] = useState({});
   const id = route.params.id;
+  
   var username
   if (route.params) {
     username = route.params.username;
@@ -40,7 +41,7 @@ const UpdateRating = ({ route, navigation }) => {
       .then((response) => {
         if (response.data.status === 1) {
           // Song was updated
-          navigation.navigate('Overview', { username: username });
+          navigation.navigate('Overview', { username: username});
         } else {
           // Update failed, display the error message from the backend
           setMessage(response.data.message);

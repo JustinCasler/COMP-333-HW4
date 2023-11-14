@@ -7,7 +7,7 @@ import axios from 'axios';
 const Overview = ({ route, navigation }) => {
   var username
   if (route.params) {
-     username = route.params.username;
+    username = route.params.username;
   }
   const handleLogout = () => {
     navigation.navigate('Login');
@@ -17,6 +17,7 @@ const Overview = ({ route, navigation }) => {
   };
   const [songs, setSongs] = useState([]);
   const [sortBy, setSortBy] = useState(''); // State to store the selected sorting option
+  const [forceUpdateCounter, setForceUpdateCounter] = useState(0); // State to update song list after deletion
 
   useEffect(() => {
     // Check if the username exists (user is logged in)
@@ -24,23 +25,32 @@ const Overview = ({ route, navigation }) => {
       // Redirect to the Login screen
       navigation.navigate('Login');
     } else {
-      axios
-        .get(process.env.EXPO_PUBLIC_API_URL, {
-          params: { action: 'overview', sort_by: sortBy },
-        })
-        .then((response) => {
-          // Group songs by artist and song
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(process.env.EXPO_PUBLIC_API_URL, {
+            params: { action: 'overview', sort_by: sortBy },
+          });
+    
           const groupedSongs = groupSongs(response.data);
-          // Calculate average rating for each group
           const averagedSongs = calculateAverageRatings(groupedSongs);
           setSongs(averagedSongs);
           console.log(averagedSongs);
-        })
-        .catch((error) => {
+        } catch (error) {
           console.error('Error fetching songs: ', error);
-        });
+        }
+      };
+    
+      // Fetch data on initial render
+      fetchData();
+
+      // Fetch data when the component is focused (on navigation)
+      const unsubscribe = navigation.addListener('focus', () => {
+        fetchData();
+      });
+
+      return unsubscribe;
     }
-  }, [username, navigation, sortBy]);
+  }, [username, navigation, sortBy, forceUpdateCounter]);
 
   const groupSongs = (songs) => {
     // Group songs by artist and song
@@ -65,7 +75,7 @@ const Overview = ({ route, navigation }) => {
           songs.reduce((sum, song) => sum + song.rating, 0) / songs.length;
         // Extract all usernames in the group
         const usernamesInGroup = songs.map((song) => song.username);
-        // Take the first song in the group to extract user and song details
+        // extract song details
         const firstSong = songs[0];
         averagedSongs.push({
           username: usernamesInGroup,
@@ -83,6 +93,24 @@ const Overview = ({ route, navigation }) => {
     setSortBy(itemValue);
   };
 
+  const handleDelete = (id) => {
+    axios
+        .post(process.env.EXPO_PUBLIC_API_URL, { id: id, action: "delete" })
+        .then((response) => {
+            if (response.data.status === 1) {
+                // Rating was deleted
+                // Increment the counter to trigger a re-render
+                setForceUpdateCounter((prevCounter) => prevCounter + 1);
+            } else {
+                // Deletion failed, display the error message from the backend
+                setMessage(response.data.message);
+            }
+        })
+        .catch((error) => {
+            setMessage("An error occurred while processing your request.");
+        }); 
+  };
+
   const renderStars = (rating) => {
     const starCount = Math.round(rating);
     const stars = Array.from({ length: 5 }, (_, index) => (
@@ -96,9 +124,18 @@ const Overview = ({ route, navigation }) => {
       <Text style={styles.songText}>{`${item.song}`}<Text style={{fontWeight: 'normal'}}> by {item.artist}</Text></Text>
       {renderStars(item.rating)}
       {item.username.includes(username) && (
-        <TouchableOpacity onPress={() => navigation.navigate('Update', { song: item.song, artist: item.artist, id: item.id, username: username })}>
-          <Icon name="pencil" size={20} color="black" />
-        </TouchableOpacity>
+        <View style={styles.buttonContainer}>
+          <View style={styles.buttonWrapper}>
+            <TouchableOpacity onPress={() => navigation.navigate('Update', { song: item.song, artist: item.artist, id: item.id, username: username})}>
+              <Icon name="pencil" size={20} color="black" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.buttonWrapper}>
+            <TouchableOpacity onPress={() => handleDelete(item.id)}>
+              <Icon name="trash" size={20} color="black" />
+            </TouchableOpacity>
+          </View>
+        </View>
       )}
     </View>
   );
@@ -147,6 +184,10 @@ const styles = StyleSheet.create({
   starsContainer: {
     flexDirection: 'row',
     marginTop: 5,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
 
