@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, Button, ScrollView, StyleSheet } from 'react-native';
+import { Text, View, Button, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 
 const Overview = ({ route, navigation }) => {
@@ -62,10 +63,12 @@ const Overview = ({ route, navigation }) => {
         const songs = groupedSongs[key];
         const averageRating =
           songs.reduce((sum, song) => sum + song.rating, 0) / songs.length;
+        // Extract all usernames in the group
+        const usernamesInGroup = songs.map((song) => song.username);
         // Take the first song in the group to extract user and song details
         const firstSong = songs[0];
         averagedSongs.push({
-          username: firstSong.username,
+          username: usernamesInGroup,
           artist: firstSong.artist,
           song: firstSong.song,
           rating: averageRating.toFixed(2), // Round to two decimal places
@@ -91,6 +94,11 @@ const Overview = ({ route, navigation }) => {
     <View key={index} style={styles.songContainer}>
       <Text style={styles.songText}>{`${item.song}`}<Text style={{fontWeight: 'normal'}}> by {item.artist}</Text></Text>
       {renderStars(item.rating)}
+      {item.username.includes(username) && (
+        <TouchableOpacity onPress={() => navigation.navigate('Update', { song: item.song, artist: item.artist })}>
+          <Icon name="pencil" size={20} color="black" />
+        </TouchableOpacity>
+      )}
     </View>
   );
 
