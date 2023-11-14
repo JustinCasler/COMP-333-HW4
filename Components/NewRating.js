@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Text, TextInput, View, Button, StyleSheet } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 
 const NewRating = ({ route, navigation }) => {
@@ -24,11 +25,6 @@ const NewRating = ({ route, navigation }) => {
 
         const rating = parseInt(inputs.rating, 10);
 
-        if (isNaN(rating) || rating < 1 || rating > 5) {
-        setMessage("Rating must be an integer between 1 and 5");
-        return;
-        }
-
         // Perform your axios post request here
         axios.post(process.env.EXPO_PUBLIC_API_URL, { inputs, action: "addnew", username: username })
         .then((response) => {
@@ -50,52 +46,87 @@ const NewRating = ({ route, navigation }) => {
 
     return (
         <View style={styles.container}>
-          <Text>{`Username: ${username}`}</Text>
+          <Text style={styles.username}>{`Username: ${username}`}</Text>
           {message && <Text style={styles.errorText}>{message}</Text>}
-          <TextInput
-            style={styles.input}
-            placeholder="Artist"
-            onChangeText={(text) => handleChange('artist', text)}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Song"
-            onChangeText={(text) => handleChange('song', text)}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Rating"
-            onChangeText={(text) => handleChange('rating', text)}
-            keyboardType="numeric"
-          />
-          <Button title="Submit" onPress={handleSubmit} />
-          <Button title="Cancel" onPress={() => navigation.goBack()} />
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Artist</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter artist"
+              onChangeText={(text) => handleChange('artist', text)}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Song Title</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter song"
+              onChangeText={(text) => handleChange('song', text)}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Rating</Text>
+            <Picker
+              style={styles.input}
+              selectedValue={inputs.rating}
+              onValueChange={(value) => handleChange('rating', value)}
+            >
+              <Picker.Item label="*" value="" />
+              <Picker.Item label="1" value="1" />
+              <Picker.Item label="2" value="2" />
+              <Picker.Item label="3" value="3" />
+              <Picker.Item label="4" value="4" />
+              <Picker.Item label="5" value="5" />
+            </Picker>
+          </View>
+          <View style={styles.buttonContainer}>
+            <View style={styles.buttonWrapper}>
+                <Button title="Submit" onPress={handleSubmit} color="green" />
+            </View>
+            <View style={styles.buttonWrapper}>
+                <Button title="Cancel" onPress={() => navigation.goBack()} color="red" />
+            </View>
+          </View>
         </View>
       );
+    };
     
-};
-
-const styles = StyleSheet.create({
-container: {
-    flex: 1,
-    margin: 20,
-},
-songContainer: {
-    marginBottom: 20,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-},
-songText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-},
-starsContainer: {
-    flexDirection: 'row',
-    marginTop: 5,
-},
-});
-
-  
-export default NewRating;
+    const styles = StyleSheet.create({
+      container: {
+        flex: 1,
+        margin: 20,
+      },
+      username: {
+        marginBottom: 20,
+        fontSize: 14,
+        textAlign: 'center',
+      },
+      inputContainer: {
+        marginBottom: 20,
+      },
+      label: {
+        fontSize: 16,
+        marginBottom: 5,
+      },
+      input: {
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderRadius: 8,
+        padding: 10,
+      },
+      errorText: {
+        color: 'red',
+        marginBottom: 20,
+        textAlign: 'center',
+      },
+      buttonContainer: {
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+      },
+      buttonWrapper: {
+        width: '30%',
+      },
+    });
+    
+    export default NewRating;
