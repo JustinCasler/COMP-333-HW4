@@ -20,7 +20,6 @@ const Registration = () => {
         username: username,
         password: password,
       };
-      // Make the POST request to your backend
       
       axios.post(process.env.EXPO_PUBLIC_API_URL , { inputs, action: "register" })
       .then((response) => {
@@ -80,17 +79,17 @@ const styles = StyleSheet.create({
     height: window.height,
   },
   title: {
-    fontSize: 36, // Larger font size
-    marginBottom: 20, // Increased margin
+    fontSize: 36, 
+    marginBottom: 20, 
   },
   input: {
-    height: 70, // Increased input height
-    fontSize: 22, // Larger font size for inputs
+    height: 70,
+    fontSize: 22, 
     borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 10, // Increased border radius
-    marginBottom: 20, // Increased margin
-    padding: 20, // Increased padding
+    borderRadius: 10, 
+    marginBottom: 20,
+    padding: 20, 
     width: '80%',
   },
 });

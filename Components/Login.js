@@ -20,7 +20,7 @@ export default function Login({ navigation }) {
         .then((response) => {
           if (response.data.status === 1) {
             // Login was successful
-            navigation.navigate('Overview', { username: inputs.username }); // You can replace 'Home' with the actual name of your home screen
+            navigation.navigate('Overview', { username: inputs.username }); 
           } else {
             alert(response.data.message);
           }

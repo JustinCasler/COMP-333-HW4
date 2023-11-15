@@ -89,8 +89,8 @@ function login($data) {
     $objDb = new DbConnect;
     $conn = $objDb->connect();
 
-    // Retrieve the hashed password for the username
-    $getPasswordQuery = "SELECT password FROM users WHERE username = :username";
+    // Retrieve the hashed password for the username (case-sensitive)
+    $getPasswordQuery = "SELECT password FROM users WHERE BINARY username = :username";
     $getPasswordStmt = $conn->prepare($getPasswordQuery);
     $getPasswordStmt->bindParam(':username', $data->inputs->username);
     $getPasswordStmt->execute();
