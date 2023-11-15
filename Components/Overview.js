@@ -149,8 +149,8 @@ const Overview = ({ route, navigation }) => {
             <Picker.Item label="Select" value="" />
             <Picker.Item label="Sort By Artist (A-Z)" value="artist" />
             <Picker.Item label="Sort By Artist (Z-A)" value="-artist" />
-            <Picker.Item label="Sort By Rating (Low to High)" value="rating" />
-            <Picker.Item label="Sort By Rating (High to Low)" value="-rating" />
+            <Picker.Item label="Sort By Song Title (A-Z)" value="song" />
+            <Picker.Item label="Sort By Song Title (Z-A)" value="-song" />
           </Picker>
           <ScrollView>
             {songs.map((item, index) => renderSongItem(item, index))}

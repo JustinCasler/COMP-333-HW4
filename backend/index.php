@@ -179,11 +179,11 @@ function loadOverview($sort_by) {
         case '-artist':
             $sort = ' ORDER BY artist DESC';
             break;
-        case 'rating':
-            $sort = ' ORDER BY rating ASC';
+        case 'song':
+            $sort = ' ORDER BY song ASC';
             break;
-        case '-rating':
-            $sort = ' ORDER BY rating DESC';
+        case '-song':
+            $sort = ' ORDER BY song DESC';
             break;
         default:
             // Default sorting or no sorting
