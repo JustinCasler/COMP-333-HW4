@@ -155,8 +155,14 @@ const Overview = ({ route, navigation }) => {
           <ScrollView>
             {songs.map((item, index) => renderSongItem(item, index))}
           </ScrollView>
-          <Button title="Add New" onPress={handleAddNew} />
-          <Button title="Logout" onPress={handleLogout} />
+          <View style={styles.buttonContainer}>
+            <View style={styles.bigbuttonWrapper}>
+                <Button title="Add New" onPress={handleAddNew} />
+            </View>
+            <View style={styles.bigbuttonWrapper}>
+                <Button title="Logout" onPress={handleLogout} />
+            </View>
+          </View>
         </>
       ) : (
         <Text>Loading...</Text>
@@ -188,6 +194,9 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+  }, 
+  bigbuttonWrapper: {
+    width: '30%',
   },
 });
 
