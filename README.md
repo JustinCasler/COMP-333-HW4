@@ -55,9 +55,20 @@ run
 npx expo start 
 ```
 
-in the terminal a message like : Metro waiting on exp://`{ip-address}` should pop up.
+in the terminal a message like : Metro waiting on exp://`{ip-address}` should pop up. (Or the same ip address can be found in the wifi details of whatever network you are currently using).
 1. Create a .env file in the main directory
 2. Follow the .env.example file as a template, and paste the ip-address given in the terminal into the .env file so that it reads: `EXPO_PUBLIC_API_URL = http://{ip-address-of-emulator}/backend/index.php`
 
+I have found that not including the port in the ip-address-of-emulator works best.
+
 press a to open app on the emulator. 
 
+## 3. Problem #2
+We choose to add sorting functionality which can be used on the song overview page of our app. 
+
+
+## 4. Citations:
+1. @react-native-picker/picker: icons
+2. @react-navigation: navigation
+3. dotenv: enviroment file
+4. ChatGPT: Used to help with styling  
