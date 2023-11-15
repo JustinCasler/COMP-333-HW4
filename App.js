@@ -7,6 +7,7 @@ import Login from './Components/Login'
 import Overview from './Components/Overview'
 import NewRating from './Components/NewRating'
 import Update from './Components/Update'
+import Details from './Components/Details'
 
 const Stack = createStackNavigator();
 
@@ -39,6 +40,10 @@ export default function App() {
     <Stack.Screen
       name="Update"
       component={Update}
+    />
+    <Stack.Screen
+      name="Details"
+      component={Details}
     />
   </Stack.Navigator>
 </NavigationContainer>
