@@ -111,6 +111,14 @@ const Overview = ({ route, navigation }) => {
         }); 
   };
 
+  const handleSongClick = (item) => {
+    navigation.navigate('Details', {
+      song: item.song,
+      artist: item.artist,
+      rating: item.rating,
+    });
+  };
+
   const renderStars = (rating) => {
     const starCount = Math.round(rating);
     const stars = Array.from({ length: 5 }, (_, index) => (
@@ -120,7 +128,11 @@ const Overview = ({ route, navigation }) => {
   };
 
   const renderSongItem = (item, index) => (
-    <View key={index} style={styles.songContainer}>
+    <TouchableOpacity
+      key={index}
+      style={styles.songContainer}
+      onPress={() => handleSongClick(item)}
+    >
       <Text style={styles.songText}>{`${item.song}`}<Text style={{fontWeight: 'normal'}}> by {item.artist}</Text></Text>
       {renderStars(item.rating)}
       {item.username.includes(username) && (
@@ -137,7 +149,7 @@ const Overview = ({ route, navigation }) => {
           </View>
         </View>
       )}
-    </View>
+    </TouchableOpacity>
   );
 
   return (
